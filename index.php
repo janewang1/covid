@@ -9,10 +9,12 @@
   </head>
 
   <body>
+<?php include
     <div id = "lda"></div>
     <script>
       var vis = new LDAvis("#lda", "lda.json");
     </script>
+?>
   </body>
 
 </html>
