@@ -4,29 +4,24 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-
     <title>LDAvis</title>
-    <script src="/js/Galertsoct-d3.v3.js"></script>
-    <script src="/js/Galertsoct-ldavis.js"></script>
-    <link rel="stylesheet" type="text/css" href="/styling/Galertsoct-lda.css">
+    <script src="/js/CORDaug-d3.v3.js"></script>
+    <script src="/js/CORDaug-ldavis.js"></script>
+    <link rel="stylesheet" type="text/css" href="/styling/CORDaug-lda.css">
   </head>
 
-
- <body>
+  <body>
 
   <div class="w3-container">
   <h2>Visualizations</h2>
   <p>LDavis visualizations for CORD and Google Alerts</p>
 
-  <!-- <?php include_once("Galertssept-index.html"); ?>
-  <?php include_once("Galertsoct-index.html"); ?>
- -->
   <div class="w3-bar w3-black">
     <a href="index.html" style="text-decoration:none" class="w3-bar-item w3-button tablink ">Sept Galerts</a>
 
-    <a href="#0"style="text-decoration:none" class="w3-bar-item w3-button tablink w3-red">Oct Galerts</a>
+    <a href="Galertsoct-index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink">Oct Galerts</a>
 
-    <a href="CORDaug-index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink w3-red"> Aug CORD</a>
+    <a href="#0"style="text-decoration:none" class="w3-bar-item w3-button tablink w3-red"> Aug CORD</a>
 
     <a href="CORDsept-index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink ">Sept CORD</a>
 
@@ -34,12 +29,11 @@
 
 
   </div>
-  
-    <div id = "lda3"></div>
-    <script>
-      var vis = new LDAvis("#lda3", "/json/Galertsoct-lda.json");
-    </script>
 
+    <div id = "lda"></div>
+    <script>
+      var vis = new LDAvis("#lda", "/json/CORDaug-lda.json");
+    </script>
   </body>
 
 </html>
