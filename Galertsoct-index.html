@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<!--     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
     <title>LDAvis</title>
     <script src="Galertsoct-d3.v3.js"></script>
@@ -11,26 +11,36 @@
     <link rel="stylesheet" type="text/css" href="Galertsoct-lda.css">
   </head>
 
-<!--   <div class="w3-container">
+
+ <body>
+
+  <div class="w3-container">
   <h2>Visualizations</h2>
-  <p>LDavis visualizations for CORD and Google Alerts</p> -->
+  <p>LDavis visualizations for CORD and Google Alerts</p>
+
+  <!-- <?php include_once("Galertssept-index.html"); ?>
+  <?php include_once("Galertsoct-index.html"); ?>
+ -->
+  <div class="w3-bar w3-black">
+    <a href="index.html" style="text-decoration:none" class="w3-bar-item w3-button tablink ">Sept 2020</a>
+
+    <a href="Galertsoct-index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink w3-red">Oct 2020</a>
 
 
-  <!-- <div class="w3-bar w3-light-grey">
-    
-    <a href="index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink">Test</a>
-
-    <a href="#0"style="text-decoration:none" class="w3-bar-item w3-button tablink w3-blue">Oct</a>
-
-    <a href="#0"style="text-decoration:none" class="w3-bar-item w3-button tablink">Idk</a>
-  </div> -->
+  </div>
   
-</div>
-  <body>
+  <div id = "lda2 w3-container w3-border city"></div>
+    <script>
+      var xxx = new LDAvis("#lda2", "Galertssept-lda.json");
+    </script> 
+
+  <section>
     <div id = "lda3"></div>
     <script>
       var vis = new LDAvis("#lda3", "Galertsoct-lda.json");
     </script>
+  <section>
+
   </body>
 
 </html>

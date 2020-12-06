@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -6,11 +6,6 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
     <title>LDAvis</title>
-    
-    <script src="Galertsoct-d3.v3.js"></script>
-    <script src="Galertsoct-ldavis.js"></script>
-    <link rel="stylesheet" type="text/css" href="Galertsoct-lda.css">
-
   </head>
 
   <body>
@@ -19,23 +14,28 @@
   <h2>Visualizations</h2>
   <p>LDavis visualizations for CORD and Google Alerts</p>
 
- <!--  <?php include_once("Galertssept-index.html"); ?>
-  <?php include_once("Galertsoct-index.html"); ?> -->
-
+  <!-- <?php include_once("Galertssept-index.html"); ?>
+  <?php include_once("Galertsoct-index.html"); ?>
+ -->
   <div class="w3-bar w3-black">
-    <button class="w3-bar-item w3-button tablink w3-red" onclick="openCity(event,'London')">London</button>
-    
-    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Sept')">Sept</button>
-    
-    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Oct')">Oct</button>
+    <a href="#0"style="text-decoration:none" class="w3-bar-item w3-button tablink w3-red">Sept 2020</a>
+
+    <a href="Galertsoct-index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink ">Oct 2020</a>
+
+
   </div>
   
-  <div id="London" class="w3-container w3-border city">
+  <div id = "lda2 w3-container w3-border city"></div>
+    <script>
+      var xxx = new LDAvis("#lda2", "Galertssept-lda.json");
+    </script> 
+  
+  <!-- <div id="London" class="w3-container w3-border city">
     <h2></h2>
     <p>London is the capital city of England.</p>
-  </div>
+  </div> -->
 
-  <div id="Sept" class="w3-container w3-border city" style="display:none">
+  <!-- <div id="Sept" class="w3-container w3-border city" style="display:none">
     <h2>Sept</h2>
     <?php include("Galertssept-index.html"); ?>
   </div>
@@ -43,12 +43,12 @@
   <div id="Oct" class="w3-container w3-border city" style="display:none">
     <h2>Oct</h2>
     <?php include("Galertsoct-index.html"); ?>
-
+ -->
   </div>
 </div>
 
 
-<!-- ---------------------------- -->
+<!-- ----------------------------
 
   <h1>BREAKING</h1>>
 
