@@ -16,21 +16,21 @@ LDAvis = function(to_select, json_file) {
     vis_state = {
         lambda: 1,
         topic: 0,
-        term1: ""
+        term: ""
     };
 
     // Set up a few 'global' variables to hold the data:
     var K, // number of topics 
-    R, // number of term1s to display in bar chart
+    R, // number of terms to display in bar chart
     mdsData, // (x,y) locations and topic proportions
-    mdsData3, // topic proportions for all term1s in the viz
-    lamData, // all term1s that are among the top-R most relevant for all topics, lambda values
+    mdsData3, // topic proportions for all terms in the viz
+    lamData, // all terms that are among the top-R most relevant for all topics, lambda values
     lambda = {
         old: 1,
         current: 1
     },
-    color1 = "#1f77b4", // baseline color for default topic circles and overall term1 frequencies
-    color2 = "#d62728"; // 'highlight' color for selected topics and term1-topic frequencies
+    color1 = "#1f77b4", // baseline color for default topic circles and overall term frequencies
+    color2 = "#d62728"; // 'highlight' color for selected topics and term-topic frequencies
 
     // Set the duration of each half of the transition:
     var duration = 750;
@@ -46,7 +46,7 @@ LDAvis = function(to_select, json_file) {
     mdsheight = 530,
     barwidth = 530,
     barheight = 530,
-    term1width = 90, // width to add between two panels to display term1s
+    termwidth = 90, // width to add between two panels to display terms
     mdsarea = mdsheight * mdswidth;
     // controls how big the maximum circle can be
     // doesn't depend on data, only on mds width and height:
@@ -69,7 +69,7 @@ LDAvis = function(to_select, json_file) {
     var visID = parts[parts.length - 1];
     var topicID = visID + "-topic";
     var lambdaID = visID + "-lambda";
-    var term1ID = visID + "-term1";
+    var termID = visID + "-term";
     var topicDown = topicID + "-down";
     var topicUp = topicID + "-up";
     var topicClear = topicID + "-clear";
@@ -110,10 +110,10 @@ LDAvis = function(to_select, json_file) {
             mdsData.push(obj);
         }
 
-        // a huge matrix with 3 columns: term1, Topic, Freq, where Freq is all non-zero probabilities of topics given term1s
-        // for the term1s that appear in the barcharts for this data
+        // a huge matrix with 3 columns: Term, Topic, Freq, where Freq is all non-zero probabilities of topics given terms
+        // for the terms that appear in the barcharts for this data
         mdsData3 = [];
-        for (var i = 0; i < data['token.table'].term1.length; i++) {
+        for (var i = 0; i < data['token.table'].Term.length; i++) {
             var obj = {};
             for (var key in data['token.table']) {
                 obj[key] = data['token.table'][key][i];
@@ -121,11 +121,11 @@ LDAvis = function(to_select, json_file) {
             mdsData3.push(obj);
         }
 
-        // large data for the widths of bars in bar-charts. 6 columns: term1, logprob, loglift, Freq, Total, Category
-        // Contains all possible term1s for topics in (1, 2, ..., k) and lambda in the user-supplied grid of lambda values
+        // large data for the widths of bars in bar-charts. 6 columns: Term, logprob, loglift, Freq, Total, Category
+        // Contains all possible terms for topics in (1, 2, ..., k) and lambda in the user-supplied grid of lambda values
 	// which defaults to (0, 0.01, 0.02, ..., 0.99, 1).
         lamData = [];
-        for (var i = 0; i < data['tinfo'].term1.length; i++) {
+        for (var i = 0; i < data['tinfo'].Term.length; i++) {
             var obj = {};
             for (var key in data['tinfo']) {
                 obj[key] = data['tinfo'][key][i];
@@ -158,10 +158,10 @@ LDAvis = function(to_select, json_file) {
 
         d3.select("#" + topicUp)
             .on("click", function() {
-		// remove term1 selection if it exists (from a saved URL)
-		var term1Elem = document.getElementById(term1ID + vis_state.term1);
-		if (term1Elem !== undefined) term1_off(term1Elem);
-		vis_state.term1 = "";
+		// remove term selection if it exists (from a saved URL)
+		var termElem = document.getElementById(termID + vis_state.term);
+		if (termElem !== undefined) term_off(termElem);
+		vis_state.term = "";
                 var value_old = document.getElementById(topicID).value;
                 var value_new = Math.min(K, +value_old + 1).toFixed(0);
                 // increment the value in the input box
@@ -174,10 +174,10 @@ LDAvis = function(to_select, json_file) {
 
         d3.select("#" + topicDown)
             .on("click", function() {
-		// remove term1 selection if it exists (from a saved URL)
-		var term1Elem = document.getElementById(term1ID + vis_state.term1);
-		if (term1Elem !== undefined) term1_off(term1Elem);
-		vis_state.term1 = "";
+		// remove term selection if it exists (from a saved URL)
+		var termElem = document.getElementById(termID + vis_state.term);
+		if (termElem !== undefined) term_off(termElem);
+		vis_state.term = "";
                 var value_old = document.getElementById(topicID).value;
                 var value_new = Math.max(0, +value_old - 1).toFixed(0);
                 // increment the value in the input box
@@ -190,10 +190,10 @@ LDAvis = function(to_select, json_file) {
 
         d3.select("#" + topicID)
             .on("keyup", function() {
-		// remove term1 selection if it exists (from a saved URL)
-		var term1Elem = document.getElementById(term1ID + vis_state.term1);
-		if (term1Elem !== undefined) term1_off(term1Elem);
-		vis_state.term1 = "";
+		// remove term selection if it exists (from a saved URL)
+		var termElem = document.getElementById(termID + vis_state.term);
+		if (termElem !== undefined) term_off(termElem);
+		vis_state.term = "";
                 topic_off(document.getElementById(topicID + vis_state.topic))
                 var value_new = document.getElementById(topicID).value;
                 if (!isNaN(value_new) && value_new > 0) {
@@ -243,7 +243,7 @@ LDAvis = function(to_select, json_file) {
 
         // Create new svg element (that will contain everything):
         var svg = d3.select(to_select).append("svg")
-            .attr("width", mdswidth + barwidth + margin.left + term1width + margin.right)
+            .attr("width", mdswidth + barwidth + margin.left + termwidth + margin.right)
             .attr("height", mdsheight + 2 * margin.top + margin.bottom + 2 * rMax);
 
         // Create a group for the mds plot
@@ -435,7 +435,7 @@ LDAvis = function(to_select, json_file) {
 
         var y = d3.scale.ordinal()
             .domain(barDefault2.map(function(d) {
-                return d.term1;
+                return d.Term;
             }))
             .rangeRoundBands([0, barheight], 0.15);
         var x = d3.scale.linear()
@@ -449,7 +449,7 @@ LDAvis = function(to_select, json_file) {
 
         // Add a group for the bar chart
         var chart = svg.append("g")
-            .attr("transform", "translate(" + +(mdswidth + margin.left + term1width) + "," + 2 * margin.top + ")")
+            .attr("transform", "translate(" + +(mdswidth + margin.left + termwidth) + "," + 2 * margin.top + ")")
             .attr("id", "bar-freqs");
 
         // bar chart legend/guide:
@@ -465,7 +465,7 @@ LDAvis = function(to_select, json_file) {
             .attr("x", barguide.width + 5)
             .attr("y", mdsheight + 10 + barguide.height/2)
             .style("dominant-baseline", "middle")
-            .text("Overall term1 frequency");
+            .text("Overall term frequency");
 
         d3.select("#bar-freqs").append("rect")
             .attr("x", 0)
@@ -478,18 +478,18 @@ LDAvis = function(to_select, json_file) {
             .attr("x", barguide.width/2 + 5)
             .attr("y", mdsheight + 10 + (3/2)*barguide.height + 5)
             .style("dominant-baseline", "middle")
-            .text("Estimated term1 frequency within the selected topic");
+            .text("Estimated term frequency within the selected topic");
 
 	// footnotes:
         d3.select("#bar-freqs")
             .append("a")
-            .attr("xlink:href", "http://vis.stanford.edu/files/2012-term1ite-AVI.pdf")
+            .attr("xlink:href", "http://vis.stanford.edu/files/2012-Termite-AVI.pdf")
             .attr("target", "_blank")
             .append("text")
             .attr("x", 0)
             .attr("y", mdsheight + 10 + (6/2)*barguide.height + 5)
             .style("dominant-baseline", "middle")
-            .text("1. saliency(term1 w) = frequency(w) * [sum_t p(t | w) * log(p(t | w)/p(t))] for topics t; see Chuang et. al (2012)");
+            .text("1. saliency(term w) = frequency(w) * [sum_t p(t | w) * log(p(t | w)/p(t))] for topics t; see Chuang et. al (2012)");
         d3.select("#bar-freqs")
             .append("a")
             .attr("xlink:href", "http://nlp.stanford.edu/events/illvi2014/papers/sievert-illvi2014.pdf")
@@ -498,20 +498,20 @@ LDAvis = function(to_select, json_file) {
             .attr("x", 0)
             .attr("y", mdsheight + 10 + (8/2)*barguide.height + 5)
             .style("dominant-baseline", "middle")
-            .text("2. relevance(term1 w | topic t) = \u03BB * p(w | t) + (1 - \u03BB) * p(w | t)/p(w); see Sievert & Shirley (2014)");
+            .text("2. relevance(term w | topic t) = \u03BB * p(w | t) + (1 - \u03BB) * p(w | t)/p(w); see Sievert & Shirley (2014)");
 
         // Bind 'default' data to 'default' bar chart
-        var basebars1 = chart.selectAll(".bar-totals")
+        var basebars = chart.selectAll(".bar-totals")
             .data(barDefault2)
             .enter();
 
         // Draw the gray background bars defining the overall frequency of each word
-        basebars1
+        basebars
             .append("rect")
             .attr("class", "bar-totals")
             .attr("x", 0)
             .attr("y", function(d) {
-                return y(d.term1);
+                return y(d.Term);
             })
             .attr("height", y.rangeBand())
             .attr("width", function(d) {
@@ -521,37 +521,37 @@ LDAvis = function(to_select, json_file) {
             .attr("opacity", 0.4);
 
         // Add word labels to the side of each bar
-        basebars1
+        basebars
             .append("text")
             .attr("x", -5)
-            .attr("class", "term1s")
+            .attr("class", "terms")
             .attr("y", function(d) {
-                return y(d.term1) + 12;
+                return y(d.Term) + 12;
             })
             .attr("cursor", "pointer")
             .attr("id", function(d) {
-                return (term1ID + d.term1)
+                return (termID + d.Term)
             })
             .style("text-anchor", "end") // right align text - use 'middle' for center alignment
             .text(function(d) {
-                return d.term1;
+                return d.Term;
             })
             .on("mouseover", function() {
-                term1_hover(this);
+                term_hover(this);
             })
         // .on("click", function(d) {
-        // 	var old_term1 = term1ID + vis_state.term1;
-        // 	if (vis_state.term1 != "" && old_term1 != this.id) {
-        // 	    term1_off(document.getElementById(old_term1));
+        // 	var old_term = termID + vis_state.term;
+        // 	if (vis_state.term != "" && old_term != this.id) {
+        // 	    term_off(document.getElementById(old_term));
         // 	}
-        // 	vis_state.term1 = d.term1;
+        // 	vis_state.term = d.Term;
         // 	state_save(true);
-        // 	term1_on(this);
+        // 	term_on(this);
         // 	debugger;
         // })
             .on("mouseout", function() {
-                vis_state.term1 = "";
-                term1_off(this);
+                vis_state.term = "";
+                term_off(this);
                 state_save(true);
             });
 
@@ -561,7 +561,7 @@ LDAvis = function(to_select, json_file) {
             .attr("class", "bubble-tool") //  set class so we can remove it when highlight_off is called  
             .style("text-anchor", "middle")
             .style("font-size", "16px")
-            .text("Top-" + R + " Most Salient term1s");
+            .text("Top-" + R + " Most Salient Terms");
 	
         title.append("tspan")
 	    .attr("baseline-shift", "super")	    
@@ -627,7 +627,7 @@ LDAvis = function(to_select, json_file) {
             topicDiv.appendChild(clear);
 
             // lambda inputs
-    	    //var lambdaDivLeft = 8 + mdswidth + margin.left + term1width;
+    	    //var lambdaDivLeft = 8 + mdswidth + margin.left + termwidth;
     	    var lambdaDivWidth = barwidth;
     	    var lambdaDiv = document.createElement("div");
     	    lambdaDiv.setAttribute("id", "lambdaInput");
@@ -713,7 +713,7 @@ LDAvis = function(to_select, json_file) {
 
         }
 
-        // function to re-order the bars (gray and red), and term1s:
+        // function to re-order the bars (gray and red), and terms:
         function reorder_bars(increase) {
             // grab the bar-chart data for this topic only:
             var dat2 = lamData.filter(function(d) {
@@ -734,7 +734,7 @@ LDAvis = function(to_select, json_file) {
 
             var y = d3.scale.ordinal()
                 .domain(dat3.map(function(d) {
-                    return d.term1;
+                    return d.Term;
                 }))
                 .rangeRoundBands([0, barheight], 0.15);
             var x = d3.scale.linear()
@@ -748,21 +748,21 @@ LDAvis = function(to_select, json_file) {
             var graybars = d3.select("#bar-freqs")
                 .selectAll(".bar-totals")
                 .data(dat3, function(d) {
-                    return d.term1;
+                    return d.Term;
                 });
 
             // Change word labels
             var labels = d3.select("#bar-freqs")
-                .selectAll(".term1s")
+                .selectAll(".terms")
                 .data(dat3, function(d) {
-                    return d.term1;
+                    return d.Term;
                 });
 
             // Create red bars (drawn over the gray ones) to signify the frequency under the selected topic
             var redbars = d3.select("#bar-freqs")
                 .selectAll(".overlay")
                 .data(dat3, function(d) {
-                    return d.term1;
+                    return d.Term;
                 });
 
             // adapted from http://bl.ocks.org/mbostock/1166403
@@ -780,7 +780,7 @@ LDAvis = function(to_select, json_file) {
                 .attr("class", "bar-totals")
                 .attr("x", 0)
                 .attr("y", function(d) {
-                    return y(d.term1) + barheight + margin.bottom + 2 * rMax;
+                    return y(d.Term) + barheight + margin.bottom + 2 * rMax;
                 })
                 .attr("height", y.rangeBand())
                 .style("fill", color1)
@@ -789,33 +789,33 @@ LDAvis = function(to_select, json_file) {
             var labelsEnter = labels.enter()
                 .append("text")
                 .attr("x", -5)
-                .attr("class", "term1s")
+                .attr("class", "terms")
                 .attr("y", function(d) {
-                    return y(d.term1) + 12 + barheight + margin.bottom + 2 * rMax;
+                    return y(d.Term) + 12 + barheight + margin.bottom + 2 * rMax;
                 })
                 .attr("cursor", "pointer")
                 .style("text-anchor", "end")
                 .attr("id", function(d) {
-                    return (term1ID + d.term1)
+                    return (termID + d.Term)
                 })
                 .text(function(d) {
-                    return d.term1;
+                    return d.Term;
                 })
                 .on("mouseover", function() {
-                    term1_hover(this);
+                    term_hover(this);
                 })
             // .on("click", function(d) {
-            //     var old_term1 = term1ID + vis_state.term1;
-            //     if (vis_state.term1 != "" && old_term1 != this.id) {
-            // 	term1_off(document.getElementById(old_term1));
+            //     var old_term = termID + vis_state.term;
+            //     if (vis_state.term != "" && old_term != this.id) {
+            // 	term_off(document.getElementById(old_term));
             //     }
-            //     vis_state.term1 = d.term1;
+            //     vis_state.term = d.Term;
             //     state_save(true);
-            //     term1_on(this);
+            //     term_on(this);
             // })
                 .on("mouseout", function() {
-                    vis_state.term1 = "";
-                    term1_off(this);
+                    vis_state.term = "";
+                    term_off(this);
                     state_save(true);
                 });
 
@@ -823,7 +823,7 @@ LDAvis = function(to_select, json_file) {
                 .attr("class", "overlay")
                 .attr("x", 0)
                 .attr("y", function(d) {
-                    return y(d.term1) + barheight + margin.bottom + 2 * rMax;
+                    return y(d.Term) + barheight + margin.bottom + 2 * rMax;
                 })
                 .attr("height", y.rangeBand())
                 .style("fill", color2)
@@ -838,13 +838,13 @@ LDAvis = function(to_select, json_file) {
                     .transition().duration(duration)
                     .delay(duration)
                     .attr("y", function(d) {
-                        return y(d.term1);
+                        return y(d.Term);
                     });
                 labelsEnter
                     .transition().duration(duration)
                     .delay(duration)
                     .attr("y", function(d) {
-                        return y(d.term1) + 12;
+                        return y(d.Term) + 12;
                     });
                 redbarsEnter
                     .attr("width", function(d) {
@@ -853,7 +853,7 @@ LDAvis = function(to_select, json_file) {
                     .transition().duration(duration)
                     .delay(duration)
                     .attr("y", function(d) {
-                        return y(d.term1);
+                        return y(d.Term);
                     });
 
                 graybars.transition().duration(duration)
@@ -862,12 +862,12 @@ LDAvis = function(to_select, json_file) {
                     })
                     .transition().duration(duration)
                     .attr("y", function(d) {
-                        return y(d.term1);
+                        return y(d.Term);
                     });
                 labels.transition().duration(duration)
                     .delay(duration)
                     .attr("y", function(d) {
-                        return y(d.term1) + 12;
+                        return y(d.Term) + 12;
                     });
                 redbars.transition().duration(duration)
                     .attr("width", function(d) {
@@ -875,7 +875,7 @@ LDAvis = function(to_select, json_file) {
                     })
                     .transition().duration(duration)
                     .attr("y", function(d) {
-                        return y(d.term1);
+                        return y(d.Term);
                     });
 
                 // Transition exiting rectangles to the bottom of the barchart:
@@ -915,7 +915,7 @@ LDAvis = function(to_select, json_file) {
                     .attr("width", 100) // FIXME by looking up old width of these bars
                     .transition().duration(duration)
                     .attr("y", function(d) {
-                        return y(d.term1);
+                        return y(d.Term);
                     })
                     .transition().duration(duration)
                     .attr("width", function(d) {
@@ -924,13 +924,13 @@ LDAvis = function(to_select, json_file) {
                 labelsEnter
                     .transition().duration(duration)
                     .attr("y", function(d) {
-                        return y(d.term1) + 12;
+                        return y(d.Term) + 12;
                     });
                 redbarsEnter
                     .attr("width", 50) // FIXME by looking up old width of these bars
                     .transition().duration(duration)
                     .attr("y", function(d) {
-                        return y(d.term1);
+                        return y(d.Term);
                     })
                     .transition().duration(duration)
                     .attr("width", function(d) {
@@ -939,7 +939,7 @@ LDAvis = function(to_select, json_file) {
 
                 graybars.transition().duration(duration)
                     .attr("y", function(d) {
-                        return y(d.term1);
+                        return y(d.Term);
                     })
                     .transition().duration(duration)
                     .attr("width", function(d) {
@@ -947,11 +947,11 @@ LDAvis = function(to_select, json_file) {
                     });
                 labels.transition().duration(duration)
                     .attr("y", function(d) {
-                        return y(d.term1) + 12;
+                        return y(d.Term) + 12;
                     });
                 redbars.transition().duration(duration)
                     .attr("y", function(d) {
-                        return y(d.term1);
+                        return y(d.Term);
                     })
                     .transition().duration(duration)
                     .attr("width", function(d) {
@@ -1013,7 +1013,7 @@ LDAvis = function(to_select, json_file) {
 		.attr("class", "bubble-tool") //  set class so we can remove it when highlight_off is called  
 		.style("text-anchor", "middle")
 		.style("font-size", "16px")
-		.text("Top-" + R + " Most Relevant term1s for Topic " + topics + " (" + Freq + "% of tokens)");
+		.text("Top-" + R + " Most Relevant Terms for Topic " + topics + " (" + Freq + "% of tokens)");
 	    
             // grab the bar-chart data for this topic only:
             var dat2 = lamData.filter(function(d) {
@@ -1032,10 +1032,10 @@ LDAvis = function(to_select, json_file) {
             // truncate to the top R tokens:
             var dat3 = dat2.slice(0, R);
 
-            // scale the bars to the top R term1s:
+            // scale the bars to the top R terms:
             var y = d3.scale.ordinal()
                 .domain(dat3.map(function(d) {
-                    return d.term1;
+                    return d.Term;
                 }))
                 .rangeRoundBands([0, barheight], 0.15);
             var x = d3.scale.linear()
@@ -1053,7 +1053,7 @@ LDAvis = function(to_select, json_file) {
                 .data(dat3)
                 .attr("x", 0)
                 .attr("y", function(d) {
-                    return y(d.term1);
+                    return y(d.Term);
                 })
                 .attr("height", y.rangeBand())
                 .attr("width", function(d) {
@@ -1063,18 +1063,18 @@ LDAvis = function(to_select, json_file) {
                 .attr("opacity", 0.4);
 
             // Change word labels
-            d3.selectAll(".term1s")
+            d3.selectAll(".terms")
                 .data(dat3)
                 .attr("x", -5)
                 .attr("y", function(d) {
-                    return y(d.term1) + 12;
+                    return y(d.Term) + 12;
                 })
                 .attr("id", function(d) {
-                    return (term1ID + d.term1)
+                    return (termID + d.Term)
                 })
                 .style("text-anchor", "end") // right align text - use 'middle' for center alignment
                 .text(function(d) {
-                    return d.term1;
+                    return d.Term;
                 });
 
             // Create red bars (drawn over the gray ones) to signify the frequency under the selected topic
@@ -1085,7 +1085,7 @@ LDAvis = function(to_select, json_file) {
                 .attr("class", "overlay")
                 .attr("x", 0)
                 .attr("y", function(d) {
-                    return y(d.term1);
+                    return y(d.Term);
                 })
                 .attr("height", y.rangeBand())
                 .attr("width", function(d) {
@@ -1115,7 +1115,7 @@ LDAvis = function(to_select, json_file) {
             circle.style.fill = color1;
 
             var title = d3.selectAll(".bubble-tool")
-		.text("Top-" + R + " Most Salient term1s");
+		.text("Top-" + R + " Most Salient Terms");
 	    title.append("tspan")
 	     	.attr("baseline-shift", "super")	    
 	     	.attr("font-size", 12)
@@ -1131,7 +1131,7 @@ LDAvis = function(to_select, json_file) {
 
             var y = d3.scale.ordinal()
                 .domain(dat2.map(function(d) {
-                    return d.term1;
+                    return d.Term;
                 }))
                 .rangeRoundBands([0, barheight], 0.15);
             var x = d3.scale.linear()
@@ -1146,7 +1146,7 @@ LDAvis = function(to_select, json_file) {
                 .data(dat2)
                 .attr("x", 0)
                 .attr("y", function(d) {
-                    return y(d.term1);
+                    return y(d.Term);
                 })
                 .attr("height", y.rangeBand())
                 .attr("width", function(d) {
@@ -1156,15 +1156,15 @@ LDAvis = function(to_select, json_file) {
                 .attr("opacity", 0.4);
 
             //Change word labels
-            d3.selectAll(".term1s")
+            d3.selectAll(".terms")
                 .data(dat2)
                 .attr("x", -5)
                 .attr("y", function(d) {
-                    return y(d.term1) + 12;
+                    return y(d.Term) + 12;
                 })
                 .style("text-anchor", "end") // right align text - use 'middle' for center alignment
                 .text(function(d) {
-                    return d.term1;
+                    return d.Term;
                 });
 
             // adapted from http://bl.ocks.org/mbostock/1166403
@@ -1180,24 +1180,24 @@ LDAvis = function(to_select, json_file) {
                 .call(xAxis);
         }
 
-        // event definition for mousing over a term1
-        function term1_hover(term1) {
-            var old_term1 = term1ID + vis_state.term1;
-            if (vis_state.term1 != "" && old_term1 != term1.id) {
-                term1_off(document.getElementById(old_term1));
+        // event definition for mousing over a term
+        function term_hover(term) {
+            var old_term = termID + vis_state.term;
+            if (vis_state.term != "" && old_term != term.id) {
+                term_off(document.getElementById(old_term));
             }
-            vis_state.term1 = term1.innerHTML;
-            term1_on(term1);
+            vis_state.term = term.innerHTML;
+            term_on(term);
             state_save(true);
         }
-        // updates vis when a term1 is selected via click or hover
-        function term1_on(term1) {
-            if (term1 == null) return null;
-            term1.style["fontWeight"] = "bold";
-            var d = term1.__data__
-            var term1 = d.term1;
+        // updates vis when a term is selected via click or hover
+        function term_on(term) {
+            if (term == null) return null;
+            term.style["fontWeight"] = "bold";
+            var d = term.__data__
+            var Term = d.Term;
             var dat2 = mdsData3.filter(function(d2) {
-                return d2.term1 == term1
+                return d2.Term == Term
             });
 
             var k = dat2.length; // number of topics for this token with non-zero frequency
@@ -1246,12 +1246,12 @@ LDAvis = function(to_select, json_file) {
 
             // Alter the guide
             d3.select(".circleGuideTitle")
-                .text("Conditional topic distribution given term1 = '" + term1.innerHTML + "'");
+                .text("Conditional topic distribution given term = '" + term.innerHTML + "'");
         }
 
-        function term1_off(term1) {
-            if (term1 == null) return null;
-            term1.style["fontWeight"] = "normal";
+        function term_off(term) {
+            if (term == null) return null;
+            term.style["fontWeight"] = "normal";
 
             d3.selectAll(".dot")
                 .data(mdsData)
@@ -1290,20 +1290,20 @@ LDAvis = function(to_select, json_file) {
         if (params.length > 1) {
             vis_state.topic = params[0].split("=")[1];
             vis_state.lambda = params[1].split("=")[1];
-            vis_state.term1 = params[2].split("=")[1];
+            vis_state.term = params[2].split("=")[1];
 
 	    // Idea: write a function to parse the URL string
-	    // only accept values in [0,1] for lambda, {0, 1, ..., K} for topics (any string is OK for term1)
+	    // only accept values in [0,1] for lambda, {0, 1, ..., K} for topics (any string is OK for term)
 	    // Allow for subsets of the three to be entered:
-	    // (1) topic only (lambda = 1 term1 = "")
-	    // (2) lambda only (topic = 0 term1 = "") visually the same but upon hovering a topic, the effect of lambda will be seen
-	    // (3) term1 only (topic = 0 lambda = 1) only fires when the term1 is among the R most salient
-	    // (4) topic + lambda (term1 = "")
-	    // (5) topic + term1 (lambda = 1)
-	    // (6) lambda + term1 (topic = 0) visually lambda doesn't make a difference unless a topic is hovered
-	    // (7) topic + lambda + term1
+	    // (1) topic only (lambda = 1 term = "")
+	    // (2) lambda only (topic = 0 term = "") visually the same but upon hovering a topic, the effect of lambda will be seen
+	    // (3) term only (topic = 0 lambda = 1) only fires when the term is among the R most salient
+	    // (4) topic + lambda (term = "")
+	    // (5) topic + term (lambda = 1)
+	    // (6) lambda + term (topic = 0) visually lambda doesn't make a difference unless a topic is hovered
+	    // (7) topic + lambda + term
 
-	    // Short-term1: assume format of "#topic=k&lambda=l&term1=s" where k, l, and s are strings (b/c they're from a URL)
+	    // Short-term: assume format of "#topic=k&lambda=l&term=s" where k, l, and s are strings (b/c they're from a URL)
 
 	    // Force k (topic identifier) to be an integer between 0 and K:
 	    vis_state.topic = Math.round(Math.min(K, Math.max(0, vis_state.topic)));
@@ -1326,13 +1326,13 @@ LDAvis = function(to_select, json_file) {
 		}
             }
 	    lambda.current = vis_state.lambda;
-            var term1Elem = document.getElementById(term1ID + vis_state.term1);
-            if (term1Elem !== undefined) term1_on(term1Elem);
+            var termElem = document.getElementById(termID + vis_state.term);
+            if (termElem !== undefined) term_on(termElem);
         }
 
         function state_url() {
             return location.origin + location.pathname + "#topic=" + vis_state.topic +
-                "&lambda=" + vis_state.lambda + "&term1=" + vis_state.term1;
+                "&lambda=" + vis_state.lambda + "&term=" + vis_state.term;
         }
 
         function state_save(replace) {
@@ -1346,10 +1346,10 @@ LDAvis = function(to_select, json_file) {
             if (vis_state.topic > 0) {
                 topic_off(document.getElementById(topicID + vis_state.topic));
             }
-            if (vis_state.term1 != "") {
-                term1_off(document.getElementById(term1ID + vis_state.term1));
+            if (vis_state.term != "") {
+                term_off(document.getElementById(termID + vis_state.term));
             }
-            vis_state.term1 = "";
+            vis_state.term = "";
             document.getElementById(topicID).value = vis_state.topic = 0;
             state_save(true);
         }
