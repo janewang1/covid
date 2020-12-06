@@ -2,32 +2,66 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
     <title>LDAvis</title>
     <script src="d3.v3.js"></script>
     <script src="ldavis.js"></script>
     <link rel="stylesheet" type="text/css" href="lda.css">
 
-    <script src="Galertsoct-d3.v3.js"></script>
+    <!-- <script src="Galertsoct-d3.v3.js"></script>
     <script src="Galertsoct-ldavis.js"></script>
-    <link rel="stylesheet" type="text/css" href="Galertsoct-lda.css">
+    <link rel="stylesheet" type="text/css" href="Galertsoct-lda.css"> -->
   </head>
 
   <body>
-    <div class="w3-container">
-    <div id = "lda"></div>
+    <!-- tabs -->
+    <div class="w3-bar w3-light-grey">
+      <form class="w3-bar-item w3-button" action="Galertsoct-index.html">
+          <input type="submit" value="Oct" />
+      </form>
+      
+      <button class="w3-bar-item w3-button" onclick="openContent('Test')">Test</button>
+      <button class="w3-bar-item w3-button" onclick="openContent('Tokyo')">Tokyo</button>
+    </div>
+
+    <div id="Test" class="w3-container city">
+      <h2>Test</h2>
+      </div>    
+        <script>
+          var vis = new LDAvis("#lda", "lda.json");
+        </script>
+      </div>
+    </div>
+
+    <div id="Oct" class="w3-container city" style="display:none">
+      <h2>Oct</h2>
+      <p>Oct Google Alerts.</p> 
+    </div>
+
+    <div id="Tokyo" class="w3-container city" style="display:none">
+      <h2>Tokyo</h2>
+      <p>Tokyo is the capital of Japan.</p>
+    </div>
+
+    <script>
+    function openContent(cityName) {
+      var i;
+      var x = document.getElementsByClassName("city");
+      for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";  
+      }
+      document.getElementById(cityName).style.display = "block";  
+    }
+    </script>
+
+  
+ <!--  </div>    
     <script>
       var vis = new LDAvis("#lda", "lda.json");
     </script>
-    </div>
-
-<!--     <?php include_once("Galertsoct-index.html"); ?>
- -->
-  <div class="w3-container">
-    <div id = "lda2"></div>
-    <script>
-      var xxx = new LDAvis("#lda2", "Galertsoct-lda.json");
-    </script>
-</div>
+    </div> -->
 
   </body>
 
