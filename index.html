@@ -6,10 +6,7 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
     <title>LDAvis</title>
-    <script src="d3.v3.js"></script>
-    <script src="ldavis.js"></script>
-    <link rel="stylesheet" type="text/css" href="lda.css">
-
+    
     <script src="Galertsoct-d3.v3.js"></script>
     <script src="Galertsoct-ldavis.js"></script>
     <link rel="stylesheet" type="text/css" href="Galertsoct-lda.css">
@@ -22,30 +19,30 @@
   <h2>Visualizations</h2>
   <p>LDavis visualizations for CORD and Google Alerts</p>
 
-  <?php include_once("Galertssept-index.html"); ?>
-  <?php include_once("Galertsoct-index.html"); ?>
-  
+ <!--  <?php include_once("Galertssept-index.html"); ?>
+  <?php include_once("Galertsoct-index.html"); ?> -->
+
   <div class="w3-bar w3-black">
     <button class="w3-bar-item w3-button tablink w3-red" onclick="openCity(event,'London')">London</button>
     
-    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Paris')">Paris</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Sept')">Sept</button>
     
-    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Tokyo')">Tokyo</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Oct')">Oct</button>
   </div>
   
   <div id="London" class="w3-container w3-border city">
-    <h2>London</h2>
+    <h2></h2>
     <p>London is the capital city of England.</p>
   </div>
 
-  <div id="Paris" class="w3-container w3-border city" style="display:none">
-    <h2>Paris</h2>
-    <?php include_once("Galertssept-index.html"); ?>
+  <div id="Sept" class="w3-container w3-border city" style="display:none">
+    <h2>Sept</h2>
+    <?php include("Galertssept-index.html"); ?>
   </div>
 
-  <div id="Tokyo" class="w3-container w3-border city" style="display:none">
-    <h2>Tokyo</h2>
-    <?php include_once("Galertsoct-index.html"); ?>
+  <div id="Oct" class="w3-container w3-border city" style="display:none">
+    <h2>Oct</h2>
+    <?php include("Galertsoct-index.html"); ?>
 
   </div>
 </div>
@@ -76,10 +73,10 @@ function openCity(evt, cityName) {
   }
   tablinks = document.getElementsByClassName("tablink");
   for (i = 0; i < x.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" w3-blue", "");
+    tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
   }
   document.getElementById(cityName).style.display = "block";
-  evt.currentTarget.className += " w3-blue";
+  evt.currentTarget.className += " w3-red";
 }
 </script>
 
