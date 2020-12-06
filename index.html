@@ -10,72 +10,56 @@
     <script src="ldavis.js"></script>
     <link rel="stylesheet" type="text/css" href="lda.css">
 
-    <!-- <script src="Galertsoct-d3.v3.js"></script>
+    <script src="Galertsoct-d3.v3.js"></script>
     <script src="Galertsoct-ldavis.js"></script>
-    <link rel="stylesheet" type="text/css" href="Galertsoct-lda.css"> -->
+    <link rel="stylesheet" type="text/css" href="Galertsoct-lda.css">
+
   </head>
 
   <body>
 
-    <!-- tabs -->
-    <!-- <div class="w3-bar w3-light-grey">
-      <form class="w3-bar-item w3-button tablink w3-grey" action="Galertsoct-index.html">
-          <input type="submit" value="Oct" />
-      </form>
-      
-      <button class="w3-bar-item w3-button tablink" onclick="openContent('Test')">Test</button> 
-      <button class="w3-bar-item w3-button tablink" onclick="openContent('Tokyo')">Tokyo</button>
-    </div>
-
-    <div id="Test" class="w3-container w3-border city">
-      <h2>Test</h2>
-      </div>    
-        <script>
-          var vis = new LDAvis("#lda", "lda.json");
-        </script>
-      </div>
-    </div>
-
-    <div id="Oct" class="w3-container w3-border city" style="display:none">
-      <h2>Oct</h2>
-      <p>Oct Google Alerts.</p> 
-    </div>
-
-    <div id="Tokyo" class="w3-container w3-border city" style="display:none">
-      <h2>Tokyo</h2>
-      <p>Tokyo is the capital of Japan.</p>
-    </div>
-
-    <script>
-    function openContent(cityName) {
-      var i, tablinks;
-      var x = document.getElementsByClassName("city");
-      for (i = 0; i < x.length; i++) {
-        x[i].style.display = "none";  
-      }
-      tablinks = document.getElementsByClassName("tablink");
-      for (i = 0; i < x.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
-      }
-      document.getElementById(cityName).style.display = "block";
-      evt.currentTarget.className += " w3-red";
-    }
-    </script> -->
-
-    <div class="w3-container">
+  <div class="w3-container">
   <h2>Visualizations</h2>
   <p>LDavis visualizations for CORD and Google Alerts</p>
 
+  <div class="w3-bar w3-black">
+    <button class="w3-bar-item w3-button tablink w3-red" onclick="openCity(event,'London')">London</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Paris')">Paris</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Tokyo')">Tokyo</button>
+  </div>
+  
+  <div id="London" class="w3-container w3-border city">
+    <h2>London</h2>
+    <p>London is the capital city of England.</p>
+  </div>
+
+  <div id="Paris" class="w3-container w3-border city" style="display:none">
+    <h2>Paris</h2>
+    <?php include("Galertssept-index.html"); ?>
+  </div>
+
+  <div id="Tokyo" class="w3-container w3-border city" style="display:none">
+    <h2>Tokyo</h2>
+    <?php include("Galertsoct-index.html"); ?>
+
+  </div>
+</div>
+
+
+<!-- ---------------------------- -->
+
+  <h1>BREAKING</h1>>
 
   <div class="w3-bar w3-light-grey">
     
-    <a href="index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink w3-blue">Oct</a>
+    <a href="#0"style="text-decoration:none" class="w3-bar-item w3-button tablink w3-blue">Test</a>
 
     <a href="Galertsoct-index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink ">Oct</a>
 
     <a href="#0"style="text-decoration:none" class="w3-bar-item w3-button tablink">Idk</a>
 
   </div>
+</div>
   
 
 <script>
@@ -99,7 +83,12 @@ function openCity(evt, cityName) {
     <script>
       var vis = new LDAvis("#lda", "lda.json");
     </script>
-    </div>
+  </div>
+
+  <div id = "lda3"></div>
+    <script>
+      var vis = new LDAvis("#lda3", "Galertsoct-lda.json");
+  </script>
 
   </body>
 
