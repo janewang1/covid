@@ -1,2 +1,1 @@
-<!-- <?php include("Galertssept-index.html"); ?>
- -->
+<?php include("index.html"); ?>
