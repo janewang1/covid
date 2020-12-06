@@ -1,3 +1,3 @@
-<?php include_once("index.html"); ?>
+<?php include("Galertssept-index.html"); ?>
 
-<?php include_once("Galertsoct-index.html"); ?>
+<?php include("Galertsoct-index.html"); ?>
