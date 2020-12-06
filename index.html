@@ -16,17 +16,18 @@
   </head>
 
   <body>
+
     <!-- tabs -->
-    <div class="w3-bar w3-light-grey">
-      <form class="w3-bar-item w3-button" action="Galertsoct-index.html">
+    <!-- <div class="w3-bar w3-light-grey">
+      <form class="w3-bar-item w3-button tablink w3-grey" action="Galertsoct-index.html">
           <input type="submit" value="Oct" />
       </form>
       
-      <button class="w3-bar-item w3-button" onclick="openContent('Test')">Test</button>
-      <button class="w3-bar-item w3-button" onclick="openContent('Tokyo')">Tokyo</button>
+      <button class="w3-bar-item w3-button tablink" onclick="openContent('Test')">Test</button> 
+      <button class="w3-bar-item w3-button tablink" onclick="openContent('Tokyo')">Tokyo</button>
     </div>
 
-    <div id="Test" class="w3-container city">
+    <div id="Test" class="w3-container w3-border city">
       <h2>Test</h2>
       </div>    
         <script>
@@ -35,26 +36,64 @@
       </div>
     </div>
 
-    <div id="Oct" class="w3-container city" style="display:none">
+    <div id="Oct" class="w3-container w3-border city" style="display:none">
       <h2>Oct</h2>
       <p>Oct Google Alerts.</p> 
     </div>
 
-    <div id="Tokyo" class="w3-container city" style="display:none">
+    <div id="Tokyo" class="w3-container w3-border city" style="display:none">
       <h2>Tokyo</h2>
       <p>Tokyo is the capital of Japan.</p>
     </div>
 
     <script>
     function openContent(cityName) {
-      var i;
+      var i, tablinks;
       var x = document.getElementsByClassName("city");
       for (i = 0; i < x.length; i++) {
         x[i].style.display = "none";  
       }
-      document.getElementById(cityName).style.display = "block";  
+      tablinks = document.getElementsByClassName("tablink");
+      for (i = 0; i < x.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+      }
+      document.getElementById(cityName).style.display = "block";
+      evt.currentTarget.className += " w3-red";
     }
-    </script>
+    </script> -->
+
+    <div class="w3-container">
+  <h2>Visualizations</h2>
+  <p>LDavis visualizations for CORD and Google Alerts</p>
+
+
+  <div class="w3-bar w3-light-grey">
+    
+    <a href="Galertsoct-index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink w3-blue">Oct</a>
+
+    <a href="index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink ">Test</a>
+
+    <a href="#0"style="text-decoration:none" class="w3-bar-item w3-button tablink">Idk</a>
+
+  </div>
+  
+
+<script>
+function openCity(evt, cityName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("city");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" w3-blue", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " w3-blue";
+}
+</script>
+
 
   
  <!--  </div>    
