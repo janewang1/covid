@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <title>LDAvis</title>
+    <script src="/js/Galertssept-d3.v3.js"></script>
+    <script src="/js/Galertssept-ldavis.js"></script>
+    <link rel="stylesheet" type="text/css" href="/styling/Galertssept-lda.css">
+  </head>
+
+  <body>
+
+  <div class="w3-container">
+  <h2>Visualizations</h2>
+  <p>LDavis visualizations for CORD and Google Alerts</p>
+
+ 
+  <div class="w3-bar w3-black">
+    <a href="#0"style="text-decoration:none" class="w3-bar-item w3-button tablink w3-red"> Sept Galerts</a>
+
+    <a href="Galertsoct-index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink ">Oct Galerts</a>
+
+    <a href="CORDaug-index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink"> Aug CORD</a>
+
+    <a href="CORDsept-index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink ">Sept CORD</a>
+
+    <a href="CORDoct-index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink ">Oct CORD</a>
+
+
+
+  </div>
+  
+   <div id = "lda2"></div>
+    <script>
+      var xxx = new LDAvis("#lda2", "/json/Galertssept-lda.json");
+    </script>
+  
+  
+  </div>
+</div>
+
+
+<!-- ----------------------------
+
+  <h1>BREAKING</h1>>
+
+  <div class="w3-bar w3-light-grey">
+    
+    <a href="#0"style="text-decoration:none" class="w3-bar-item w3-button tablink w3-blue">Test</a>
+
+    <a href="Galertsoct-index.html"style="text-decoration:none" class="w3-bar-item w3-button tablink ">Oct</a>
+
+    <a href="#0"style="text-decoration:none" class="w3-bar-item w3-button tablink">Idk</a>
+
+  </div>
+</div>
+  
+
+<script>
+function openCity(evt, cityName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("city");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " w3-red";
+}
+</script>
+
+  
+  </div>    
+    <script>
+      var vis = new LDAvis("#lda", "lda.json");
+    </script>
+  </div>
+
+  <div id = "lda3"></div>
+    <script>
+      var vis = new LDAvis("#lda3", "Galertsoct-lda.json");
+  </script>
+
+  </body>
+
+</html>
+ -->
